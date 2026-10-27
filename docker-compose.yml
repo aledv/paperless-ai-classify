@@ -1,0 +1,8 @@
+# Stays up and classifies every night at RUN_AT (see .env). For a one-off run:
+#   docker compose run --rm -e RUN_AT= paperless-ai-classify --dry-run --max 5
+services:
+  paperless-ai-classify:
+    image: ghcr.io/aledv/paperless-ai-classify:latest   # pin a tag (or tag@sha256) in production
+    container_name: paperless-ai-classify
+    restart: unless-stopped
+    env_file: .env
