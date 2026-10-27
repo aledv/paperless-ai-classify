@@ -1,5 +1,7 @@
 # paperless-ai-classify
 
+[![CI](https://github.com/aledv/paperless-ai-classify/actions/workflows/image.yml/badge.svg)](https://github.com/aledv/paperless-ai-classify/actions/workflows/image.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Image](https://img.shields.io/badge/ghcr.io-paperless--ai--classify-2496ED?logo=docker&logoColor=white)](https://github.com/aledv/paperless-ai-classify/pkgs/container/paperless-ai-classify)
+
 Let a **local LLM** (via [Ollama](https://ollama.com)) fill in the document type, title and
 correspondent of your [Paperless-ngx](https://docs.paperless-ngx.com) documents, overnight. Your
 documents never leave your network.
@@ -75,6 +77,10 @@ hadolint --config .hadolint.yaml Dockerfile      # Dockerfile linter
 
 CI runs the linters, then the tests, then publishes `ghcr.io/aledv/paperless-ai-classify`
 (`linux/arm64`, `linux/amd64`).
+
+## Contributing
+
+Issues and pull requests are welcome. Please run the linters and tests (see [Development](#development)) before opening a pull request.
 
 ## License
 
