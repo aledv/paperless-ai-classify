@@ -61,6 +61,7 @@ Names only, see `.env.example` for defaults.
 | `DOC_LANGUAGE` | Language of your documents (titles are written in it) |
 | `TAG_REVIEW`, `TAG_SEEN` | Tag names (created if missing) |
 | `SET_TYPE`, `SET_TITLE`, `SET_CORRESPONDENT` | Which fields to fill in |
+| `EXCLUDE_TYPES` | Document types the model may not choose, comma separated (e.g. one it overuses as a fallback) |
 | `STOP_AT`, `MAX_DOCS`, `MAX_CHARS` | Time window and limits of one run; text sent per document |
 | `RUN_AT` | Daily start time for the built-in scheduler; empty = run once |
 

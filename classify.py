@@ -53,6 +53,8 @@ MAX_CHARS = int(env("MAX_CHARS", "3000"))
 NUM_CTX = int(env("NUM_CTX", "4096"))
 STOP_AT = env("STOP_AT")  # "HH:MM" or empty
 RUN_AT = env("RUN_AT")  # "HH:MM" to stay running and classify every day at that time
+# document types the model may not choose (comma separated), e.g. a type it overuses as a fallback
+EXCLUDE_TYPES = {t.strip() for t in env("EXCLUDE_TYPES").split(",") if t.strip()}
 
 NONE = "none"
 GENERATED_TITLE = [
@@ -196,7 +198,7 @@ def run(dry: bool = False, max_docs: int = MAX_DOCS, ids: list | None = None) ->
         print("PAPERLESS_TOKEN is not set", file=sys.stderr)
         return 2
     stop = stop_time(dt.datetime.now())
-    types = {t["name"]: t["id"] for t in all_pages("/document_types/?page_size=200")}
+    types = {t["name"]: t["id"] for t in all_pages("/document_types/?page_size=200") if t["name"] not in EXCLUDE_TYPES}
     correspondents = {c["name"]: c["id"] for c in all_pages("/correspondents/?page_size=200")}
     review_id, seen_id = tag_id(TAG_REVIEW, dry), tag_id(TAG_SEEN, dry)
     if ids:

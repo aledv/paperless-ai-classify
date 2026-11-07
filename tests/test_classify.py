@@ -134,7 +134,7 @@ class HelpersTest(unittest.TestCase):
 class RunTest(unittest.TestCase):
     """Full run against a fake Paperless API and a fake model."""
 
-    def test_run_patches_and_tags(self):
+    def _run(self, answer, exclude=frozenset()):
         docs = {
             5: {
                 "id": 5,
@@ -170,21 +170,21 @@ class RunTest(unittest.TestCase):
                 return {}
             return docs[5]
 
-        answer = {
-            "type": "Invoice",
-            "correspondent": "Acme Energy",
-            "title": "Energy bill",
-        }
         with (
             mock.patch.object(c, "TOKEN", "t"),
+            mock.patch.object(c, "EXCLUDE_TYPES", set(exclude)),
             mock.patch.object(c, "api", fake_api),
             mock.patch.object(c, "ask", return_value=answer),
             mock.patch("builtins.print"),
         ):
             rc = c.run()
         self.assertEqual(rc, 0)
+        return patches["/documents/5/"]
+
+    def test_run_patches_and_tags(self):
+        answer = {"type": "Invoice", "correspondent": "Acme Energy", "title": "Energy bill"}
         self.assertEqual(
-            patches["/documents/5/"],
+            self._run(answer),
             {
                 "document_type": 1,
                 "correspondent": 10,
@@ -192,6 +192,12 @@ class RunTest(unittest.TestCase):
                 "tags": [3, 90, 91],
             },
         )
+
+    def test_excluded_type_is_never_set(self):
+        answer = {"type": "Invoice", "correspondent": "Acme Energy", "title": "Energy bill"}
+        patch = self._run(answer, exclude={"Invoice"})
+        self.assertNotIn("document_type", patch)
+        self.assertEqual(patch["correspondent"], 10)
 
 
 if __name__ == "__main__":
